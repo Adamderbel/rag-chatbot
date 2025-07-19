@@ -65,7 +65,7 @@ if "chat_history" not in st.session_state:
 def validate_url(url):
     if not url:
         return None
-    if not re.match(r'^https?://', url):
+    if not re.match('^https?://', url):
         url = f"https://{url}"
     return url
 
@@ -75,7 +75,7 @@ def scrape_website(url):
         headers = {"User-Agent": "Mozilla/5.0"}
         response = requests.get(url, headers=headers, timeout=10)
 
-        if response.status_code != 200:
+        if response.status_code = 200:
             return f"⚠️ Failed to fetch {url}: HTTP {response.status_code}"
 
         soup = BeautifulSoup(response.text, "html.parser")
@@ -149,7 +149,7 @@ Conversation:
         return f"❌ Failed to generate answer: {str(e)}. Ensure the Ollama server is running and the Mistral model is available."
 
 # --- Streamlit UI ---
-st.set_page_config(page_title="Web Scraper QA with Persistent Chat", layout="centered")
+st.set_page_config(page_title="Web Scraper QA with Persistent Chat" layout="centered")
 st.title("🤖 AI-Powered Web Scraper with FAISS Storage & Persistent Chat History")
 st.write("🔗 Ask questions about previously scraped websites or enter a new website URL to scrape and store its content for AI-based Q&A!")
 
