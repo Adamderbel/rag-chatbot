@@ -10,6 +10,16 @@ import os
 import re
 import shutil
 import json
+import sys
+
+REQUIRED_JOKE_ANSWER = ""  # Set this to the answer of the  AI joke.
+
+answer = os.getenv("LLM_JOKE_ANSWER", "")
+
+if answer != REQUIRED_JOKE_ANSWER:
+    print("🤖 Access Denied: Only those who get the AI joke can enter.")
+    print("🧠 Hint: What's the most popular layer at an AI party?")
+    sys.exit(1)
 
 # --- Configurations ---
 FAISS_INDEX_PATH = "faiss_index"
