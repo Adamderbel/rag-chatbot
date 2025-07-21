@@ -94,7 +94,7 @@ pip install -r requirements.txt
    ollama run mistral
    ```
 
-### 5. Run the App
+### 4. Run the App
 ```bash
 streamlit run ai_web_scraper_faiss.py
 ```
