@@ -5,7 +5,6 @@ A domain-specific AI chatbot that answers questions about a website using **Retr
 > 📌 **Key Use Case**: Build a private chatbot that deeply understands your website and provides reliable, context-aware responses.
 
 ---
-
 ## 🚀 Features
 - 🔍 Web scraping with `requests` and `BeautifulSoup`
 - 📚 Text chunking and FAISS vector storage
@@ -13,8 +12,8 @@ A domain-specific AI chatbot that answers questions about a website using **Retr
 - 🧩 RAG architecture for accurate answers
 - 🧪 Interactive Streamlit interface
 - 🔒 Persistent chat history and scraped URLs
-
-## 📸 Demo
+---
+## 📸 Screenshot
 
 
 ![Streamlit UI](screenshots/Demo1.png)
@@ -91,7 +90,6 @@ pip install -r requirements.txt
 3. Pull and run the Mistral model (or any Ollama-supported model):
    ```bash
    ollama pull mistral
-   ollama run mistral
    ```
 
 ### 4. Run the App
