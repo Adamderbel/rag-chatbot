@@ -12,15 +12,6 @@ import shutil
 import json
 import sys
 
-REQUIRED_JOKE_ANSWER = ""  # Set this to the answer of the  AI joke.
-
-answer = os.getenv("LLM_JOKE_ANSWER", "")
-
-if answer != REQUIRED_JOKE_ANSWER:
-    print("🤖 Access Denied: Only those who get the AI joke can enter.")
-    print("🧠 Hint: What's the most popular layer at an AI party?")
-    sys.exit(1)
-
 # --- Configurations ---
 FAISS_INDEX_PATH = "faiss_index"
 SCRAPED_URLS_FILE = "scraped_urls.json"
@@ -65,7 +56,7 @@ if "chat_history" not in st.session_state:
 def validate_url(url):
     if not url:
         return None
-    if not re.match('^https?://', url):
+    if not re.match(r'^https?://', url):
         url = f"https://{url}"
     return url
 
@@ -75,7 +66,7 @@ def scrape_website(url):
         headers = {"User-Agent": "Mozilla/5.0"}
         response = requests.get(url, headers=headers, timeout=10)
 
-        if response.status_code = 200:
+        if response.status_code != 200:
             return f"⚠️ Failed to fetch {url}: HTTP {response.status_code}"
 
         soup = BeautifulSoup(response.text, "html.parser")
@@ -117,39 +108,56 @@ def retrieve_and_answer(query):
     if vector_store is None or not getattr(vector_store.index, "ntotal", 0):
         return "🤖 No data stored yet."
 
+    # --- Retrieve relevant docs ---
     results = vector_store.similarity_search(query, k=2)
     context = ""
     for doc in results:
         context += f"From {doc.metadata['url']}:\n{doc.page_content}\n\n"
 
-    if not context:
+    if not context.strip():
         return "🤖 No relevant data found."
 
-    # Build conversation history string
+    # --- Conversation history (limit to last 5 turns for efficiency) ---
     conversation = ""
-    for q, a in st.session_state.chat_history:
+    history_limit = 5
+    for q, a in st.session_state.chat_history[-history_limit:]:
         conversation += f"User: {q}\nAI: {a}\n"
     conversation += f"User: {query}\nAI:"
 
-    prompt = f"""You are a helpful assistant. Use the context and the conversation history to answer the question.
+    # --- Improved Prompt ---
+    prompt = f"""
+You are an AI assistant that answers questions based on scraped website content.
 
-Context:
+## Instructions:
+- Use ONLY the provided context to answer the user’s question. 
+- If the context is not enough, say you don’t know instead of guessing. 
+- Keep answers short, clear, and helpful (3–6 sentences max). 
+- When possible, cite the source by including the website URL in your answer. 
+- Maintain a helpful and professional tone.
+
+## Context:
 {context}
 
-Conversation:
+## Conversation History:
 {conversation}
 """
 
     try:
+        # Generate answer
         answer = llm.invoke(prompt)
+
+        # Store in session + persist
         st.session_state.chat_history.append([query, answer])
         save_json(st.session_state.chat_history, CHAT_HISTORY_FILE)
+
         return answer
+
     except Exception as e:
         return f"❌ Failed to generate answer: {str(e)}. Ensure the Ollama server is running and the Mistral model is available."
 
+
 # --- Streamlit UI ---
-st.set_page_config(page_title="Web Scraper QA with Persistent Chat" layout="centered")
+st.set_page_config(page_title="Web Scraper QA with Persistent Chat", layout="centered")
 st.title("🤖 AI-Powered Web Scraper with FAISS Storage & Persistent Chat History")
 st.write("🔗 Ask questions about previously scraped websites or enter a new website URL to scrape and store its content for AI-based Q&A!")
 
