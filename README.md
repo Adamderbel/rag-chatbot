@@ -26,6 +26,7 @@ A domain-specific AI chatbot that answers questions about a website using **Retr
 | Frontend | Streamlit |
 | LLM | Mistral via Ollama |
 | Embeddings | HuggingFace |
+| Framework / Orchestration | LangChain |
 | Vector DB | FAISS |
 | Web Scraping | `requests`, `BeautifulSoup` |
 
