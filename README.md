@@ -1,6 +1,7 @@
 # 🧠 AI-Powered RAG Chatbot for Website Knowledge Base
 
 A domain-specific AI chatbot that answers questions about a website using **Retrieval-Augmented Generation (RAG)**, **FAISS**, and **Ollama's Mistral LLM**. It scrapes website content, stores it in a vector database, and provides context-aware responses via a **Streamlit** UI.
+**Demo**: https://adamderbel.github.io/Adam-Portfolio/context-aware-chatbot.html
 
 > 📌 **Key Use Case**: Build a private chatbot that deeply understands your website and provides reliable, context-aware responses.
 
@@ -20,17 +21,6 @@ A domain-specific AI chatbot that answers questions about a website using **Retr
 
 ---
 
-## ⚙️ Tech Stack
-| Component | Tech Used |
-|-----------|-----------|
-| Frontend | Streamlit |
-| LLM | Mistral via Ollama |
-| Embeddings | HuggingFace |
-| Framework / Orchestration | LangChain |
-| Vector DB | FAISS |
-| Web Scraping | `requests`, `BeautifulSoup` |
-
----
 
 ## 📈 How It Works
 1. Scrape website content from a provided URL.
